@@ -17,7 +17,7 @@ public class LapSystem2 : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        lapCount = player.lap/2 ;
+        lapCount = player.lap ;
 
         text.text = "" + lapCount;
 	}

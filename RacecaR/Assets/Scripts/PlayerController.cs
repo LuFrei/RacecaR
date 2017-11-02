@@ -11,12 +11,19 @@ public class PlayerController : MonoBehaviour
     public int lap = 0;
     public int lapLimit;
     public bool win;
+    public int cpCount;
 
     public GameObject respawn;
+    public CheckPoints1[] CP1 = new CheckPoints1[5];
 
     private void Start()
     {
-        respawn = GameObject.Find("CheckPoint");
+        respawn = GameObject.Find("CheckPoint1");
+        CP1[0] = GameObject.Find("CheckPoint1").GetComponent<CheckPoints1>();
+        CP1[1] = GameObject.Find("CheckPoint2").GetComponent<CheckPoints1>();
+        CP1[2] = GameObject.Find("CheckPoint3").GetComponent<CheckPoints1>();
+        CP1[3] = GameObject.Find("CheckPoint4").GetComponent<CheckPoints1>();
+        CP1[4] = GameObject.Find("CheckPoint5").GetComponent<CheckPoints1>();
     }
     // Update  is called once per frame
     void Update()
@@ -68,9 +75,15 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Finish"))
+        if (other.CompareTag("Finish") && cpCount >= 5)
         {
             lap += 1;
+            cpCount = 0;
+            CP1[0].active = true;
+            CP1[1].active = true;
+            CP1[2].active = true;
+            CP1[3].active = true;
+            CP1[4].active = true;
         }
 
         if (other.CompareTag("Respawn"))
