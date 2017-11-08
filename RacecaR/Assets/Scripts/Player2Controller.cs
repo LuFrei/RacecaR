@@ -12,6 +12,10 @@ public class Player2Controller : MonoBehaviour
     public int lapLimit;
     public bool win;
     public int cpCount;
+    public bool immune;
+    public int pickupCount;
+
+    float hoz;
 
     public GameObject respawn;
     public CheckPoints2[] CP2 = new CheckPoints2[5];
@@ -28,7 +32,7 @@ public class Player2Controller : MonoBehaviour
     // Update  is called once per frame
     void Update()
     {
-        float hoz;
+        
 
         if (Input.GetKey(KeyCode.LeftArrow))
         {
@@ -59,9 +63,9 @@ public class Player2Controller : MonoBehaviour
 
             gameObject.transform.Rotate(0, hoz * turnSpeed, 0);
 
-            if (Input.GetKey(KeyCode.UpArrow))
+            if (Input.GetKey(KeyCode.UpArrow ))
             {
-                gameObject.transform.Translate(0, 0, speed);
+                Accelerate();
             }
 
             if (lap >= lapLimit)
@@ -96,5 +100,10 @@ public class Player2Controller : MonoBehaviour
             transform.position = respawn.transform.position;
             transform.rotation = respawn.transform.rotation;
         }
+    }
+
+    void Accelerate()
+    {
+        gameObject.transform.Translate(0, 0, speed);
     }
 }

@@ -8,26 +8,39 @@ public class PlayerController : MonoBehaviour
     public float speed;
     public float turnSpeed;
     public bool reverse;
-    public int lap = 0;
     public int lapLimit;
-    public bool win;
+    public bool immune;
+    public int pickupCount;
     public int cpCount;
+    public bool powerupActive;
+    float duration = 5;
+    //float currSpeed;
 
+    public int lap = 0;
+    public bool win;
+    
+    public Rigidbody rgb;
     public GameObject respawn;
     public CheckPoints1[] CP1 = new CheckPoints1[5];
 
     private void Start()
     {
+        rgb = GetComponent<Rigidbody>();
+
         respawn = GameObject.Find("CheckPoint1");
         CP1[0] = GameObject.Find("CheckPoint1").GetComponent<CheckPoints1>();
         CP1[1] = GameObject.Find("CheckPoint2").GetComponent<CheckPoints1>();
         CP1[2] = GameObject.Find("CheckPoint3").GetComponent<CheckPoints1>();
         CP1[3] = GameObject.Find("CheckPoint4").GetComponent<CheckPoints1>();
         CP1[4] = GameObject.Find("CheckPoint5").GetComponent<CheckPoints1>();
+
+        powerupActive = false;
+        immune = false;
     }
     // Update  is called once per frame
     void Update()
     {
+        //currSpeed = 
         float hoz;
 
         if (Input.GetKey(KeyCode.A))
@@ -58,10 +71,11 @@ public class PlayerController : MonoBehaviour
         {
 
             gameObject.transform.Rotate(0, hoz * turnSpeed, 0);
+            //rgb.AddTorque(0, hoz * turnSpeed, 0);
 
             if (Input.GetKey(KeyCode.W))
             {
-                gameObject.transform.Translate(0, 0, speed);
+                Accelerate();
             }
 
             if (lap >= lapLimit)
@@ -70,7 +84,18 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        //toggle powerup
+        if (pickupCount > 0 && Input.GetKeyDown(KeyCode.E))
+        {
+            powerupActive = true;
+        }
 
+
+        if (powerupActive)
+        {
+            Immunity();
+        }
+        
     }
 
     void OnTriggerEnter(Collider other)
@@ -96,5 +121,33 @@ public class PlayerController : MonoBehaviour
             transform.position = respawn.transform.position;
             transform.rotation = respawn.transform.rotation;
         }
+        
+
+
+    }
+
+    void Accelerate()
+    {
+        gameObject.transform.Translate(0, 0, speed);
+        //rgb.AddForce(transform.forward * speed);
+    }
+
+    void Immunity()
+    {
+
+        immune = true;
+        duration -= 1 * Time.deltaTime;
+
+        if(duration <= 0)
+        {
+            immune = false;
+            duration = 5;
+            powerupActive = false;
+            pickupCount -= 1;
+        }
+        
+        Debug.Log(duration);
+        //LeanTween.move(gameObject, respawn.transform, 1).setEase(LeanTweenType.easeInExpo);
+
     }
 }
