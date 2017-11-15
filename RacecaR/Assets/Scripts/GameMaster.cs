@@ -7,6 +7,7 @@ public class GameMaster : MonoBehaviour {
 
     public Text timerText;
     float timer;
+    public bool inversion;
 
     private void Start()
     {
@@ -17,5 +18,10 @@ public class GameMaster : MonoBehaviour {
         
         timer = timer + 1 * Time.deltaTime;
         timerText.text = "" + timer;
+
+        if (timer >= 25)
+        {
+            inversion = true;
+        }
     }
 }

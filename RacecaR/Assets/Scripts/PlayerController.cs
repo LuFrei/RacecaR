@@ -4,35 +4,37 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public int playerID;
 
     public float speed;
+    //float currSpeed;
     public float turnSpeed;
     public bool reverse;
-    public int lapLimit;
-    public bool immune;
+    
     public int pickupCount;
-    public int cpCount;
     public bool powerupActive;
-    float duration = 5;
-    //float currSpeed;
+    float powerupDuration = 5;
+    public bool immune;
 
     public int lap = 0;
+    public int checkpointCount;
+    public int lapLimit;
     public bool win;
-    
+
+    public float topSpeed;
+    float currentSpeed = 0;
+
     public Rigidbody rgb;
     public GameObject respawn;
-    public CheckPoints1[] CP1 = new CheckPoints1[5];
+    public CheckPoints[] CP = new CheckPoints[5];
+   public GameMaster gm;
+
+    float horizontalDirection;
 
     private void Start()
     {
         rgb = GetComponent<Rigidbody>();
-
-        respawn = GameObject.Find("CheckPoint1");
-        CP1[0] = GameObject.Find("CheckPoint1").GetComponent<CheckPoints1>();
-        CP1[1] = GameObject.Find("CheckPoint2").GetComponent<CheckPoints1>();
-        CP1[2] = GameObject.Find("CheckPoint3").GetComponent<CheckPoints1>();
-        CP1[3] = GameObject.Find("CheckPoint4").GetComponent<CheckPoints1>();
-        CP1[4] = GameObject.Find("CheckPoint5").GetComponent<CheckPoints1>();
+        gm = GameObject.Find("GameMaster").GetComponent<GameMaster>();
 
         powerupActive = false;
         immune = false;
@@ -40,42 +42,82 @@ public class PlayerController : MonoBehaviour
     // Update  is called once per frame
     void Update()
     {
-        //currSpeed = 
-        float hoz;
+        switch (playerID)
+        {
+            case 1:
+            {
+                if (Input.GetKey(KeyCode.A))
+                {
+                    horizontalDirection = -1;
+                }
+                else 
+                    if (Input.GetKey(KeyCode.D))
+                    {
+                        horizontalDirection = 1;
+                    }
+                    else
+                    {
+                        horizontalDirection = 0;
+                    }
+                    break;
+            }
 
-        if (Input.GetKey(KeyCode.A))
-        {
-            hoz = -1;
+            case 2:
+            {
+                if (Input.GetKey(KeyCode.LeftArrow))
+                {
+                    horizontalDirection = -1;
+                }
+                else 
+                    if (Input.GetKey(KeyCode.RightArrow))
+                    {
+                        horizontalDirection = 1;
+                    }
+                    else
+                    {
+                        horizontalDirection = 0;
+                    }
+                    break;
+            }
         }
-        else if (Input.GetKey(KeyCode.D))
-        {
-            hoz = 1;
-        }
-        else
-        {
-            hoz = 0;
-        }
-
 
         if (reverse == true)
         {
-            hoz = -hoz;
+            horizontalDirection = -horizontalDirection;
         }
         else
         {
-            hoz = hoz;
+            horizontalDirection = horizontalDirection;
         }
-
 
         if (win == false)
         {
-
-            gameObject.transform.Rotate(0, hoz * turnSpeed, 0);
+            gameObject.transform.Rotate(0, horizontalDirection * turnSpeed, 0);
             //rgb.AddTorque(0, hoz * turnSpeed, 0);
 
-            if (Input.GetKey(KeyCode.W))
+            switch (playerID)
             {
-                Accelerate();
+                case 1:
+                {
+                    if (Input.GetKey(KeyCode.W))
+                    {
+                        Accelerate();
+                    }
+                    else
+                    {
+                        Decelerate();
+                    }
+                    break;
+                }
+
+                case 2:
+                {
+                    if (Input.GetKey(KeyCode.UpArrow))
+                    {
+                        Accelerate();
+                    }
+                    break;
+                }
             }
 
             if (lap >= lapLimit)
@@ -90,25 +132,30 @@ public class PlayerController : MonoBehaviour
             powerupActive = true;
         }
 
-
         if (powerupActive)
         {
             Immunity();
         }
-        
+
+        if(gm.inversion && !immune)
+        {
+            reverse = true;
+        }
+        else
+        {
+            reverse = false;
+        }
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Finish") && cpCount >= 5)
+        if (other.CompareTag("Finish") && checkpointCount >= 5)
         {
-            lap += 1;
-            cpCount = 0;
-            CP1[0].active = true;
-            CP1[1].active = true;
-            CP1[2].active = true;
-            CP1[3].active = true;
-            CP1[4].active = true;
+            foreach (CheckPoints cp in CP)
+                cp.GetComponent<CheckPoints>().inactive[playerID - 1] = false;
+
+            lap++;
+            checkpointCount = 0;
         }
 
         if (other.CompareTag("Respawn"))
@@ -121,33 +168,55 @@ public class PlayerController : MonoBehaviour
             transform.position = respawn.transform.position;
             transform.rotation = respawn.transform.rotation;
         }
-        
-
-
     }
 
     void Accelerate()
     {
-        gameObject.transform.Translate(0, 0, speed);
+        float maxSpeed;
+        
+
+        maxSpeed = topSpeed;
+
+        currentSpeed += 0.01f;
+
+        if(currentSpeed >= maxSpeed)
+        {
+            currentSpeed = maxSpeed;
+        }
+        
+
+
+
+        gameObject.transform.Translate(0, 0, currentSpeed);
         //rgb.AddForce(transform.forward * speed);
+    }
+
+    void Decelerate()
+    {
+        currentSpeed -= 0.02f;
+
+        if(currentSpeed <= 0)
+        {
+            currentSpeed = 0;
+        }
+
+        gameObject.transform.Translate(0, 0, currentSpeed);
     }
 
     void Immunity()
     {
-
         immune = true;
-        duration -= 1 * Time.deltaTime;
+        powerupDuration -= 1 * Time.deltaTime;
 
-        if(duration <= 0)
+        if(powerupDuration <= 0)
         {
             immune = false;
-            duration = 5;
+            powerupDuration = 5;
             powerupActive = false;
             pickupCount -= 1;
         }
         
-        Debug.Log(duration);
+        Debug.Log(powerupDuration);
         //LeanTween.move(gameObject, respawn.transform, 1).setEase(LeanTweenType.easeInExpo);
-
     }
 }

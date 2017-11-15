@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pickups : MonoBehaviour {
-
+public class Pickups : MonoBehaviour
+{
     public PlayerController player;
-    public Player2Controller player2;
+    public PlayerController player2;
 
-    private void Start()
+    void Start()
     {
         player = GameObject.Find("Player").GetComponent<PlayerController>();
-        player2 = GameObject.Find("Player2").GetComponent<Player2Controller>();
+        player2 = GameObject.Find("Player2").GetComponent<PlayerController>();
     }
-    private void Update()
+
+    void Update()
     {
         //animate the object
         transform.Rotate(1, 1, 1);

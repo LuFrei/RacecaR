@@ -11,7 +11,6 @@ public class PickupCounter : MonoBehaviour {
     private void Start()
     {
         text = GetComponent<Text>();
-        player = GameObject.Find("Player").GetComponent<PlayerController>();
     }
 
     private void Update()
