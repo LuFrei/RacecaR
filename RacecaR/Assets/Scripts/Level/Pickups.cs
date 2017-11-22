@@ -22,15 +22,15 @@ public class Pickups : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         //if player1 touches pickup, they get 1 pickup
-        if (other.gameObject.name == "Player" && player.pickupCount < 1)
+        if (other.gameObject.name == "Player" && player.pickupCount == 0)
         {
-            player.pickupCount += 1;
+            player.pickupCount += Random.Range(1, 4);
             Destroy(gameObject);
         }
 
-        if (other.gameObject.name == "Player2" && player2.pickupCount < 1)
+        if (other.gameObject.name == "Player2" && player2.pickupCount == 0)
         {
-            player2.pickupCount += 1;
+            player2.pickupCount += Random.Range(1, 4);
             Destroy(gameObject);
         }
     }
