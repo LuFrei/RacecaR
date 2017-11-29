@@ -5,7 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - KillBox
-  - Pickup
+  - Pickup A
+  - Pickup B
+  - Pickup C
   layers:
   - Default
   - TransparentFX
