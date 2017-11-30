@@ -7,52 +7,80 @@ public class GameMaster : MonoBehaviour {
 
     public Text timerText;
     float timer;
-    public bool inversion;
 
     public PlayerController player;
     public PlayerController player2;
     public float inverseDuration = 0;
     public float inverseCountdown;
+    public bool inverseActive = false;
 
-    private void Start()
+    void Start()
     {
-        inverseCountdown = Random.Range(15f, 20f);
+        inverseCountdown = Random.Range(20f, 25f);
         timerText = GameObject.Find("Timer").GetComponent<Text>();
     }
-    private void Update()
+
+    void Update()
     {
-        
+
         timer = timer + 1 * Time.deltaTime;
         timerText.text = "" + timer;
 
-        /*if (timer >= 25)
-        {
-            inversion = true;
-        }*/
 
-        if (inverseDuration > 0)
+        if (inverseActive)
         {
             inverseDuration -= 1 * Time.deltaTime;
-        }
 
-        if (inverseCountdown > 0)
-        {
-            inverseCountdown -= 1 * Time.deltaTime;
-        }
-
-        if(inverseCountdown <= 0)
-        {
-            inverseDuration = Random.Range(4f, 10f);
             player.reverse = true;
             player2.reverse = true;
+
+            if(inverseDuration <= 0)
+            {
+                inverseCountdown = Random.Range(15f, 20f);
+                inverseActive = false;
+            }
+        }
+
+        if (!inverseActive)
+        {
+            inverseCountdown -= 1 * Time.deltaTime;
+
+            player.reverse = false;
+            player2.reverse = false;
+
+            if (inverseCountdown <= 0)
+            {
+                inverseDuration = Random.Range(4f, 10f);
+                inverseActive = true;
+            }
+        }
+
+
+
+        /*if(inverseCountdown <= 0)
+        {
+            resetDuration = true;
+
+            if (resetDuration)
+            {
+                inverseDuration = Random.Range(4f, 10f);
+                resetDuration = false;
+            }
+
+
         }
 
         if(inverseDuration <= 0)
         {
-            inverseCountdown = Random.Range(15f, 25f);
-            player.reverse = false;
-            player2.reverse = false;
-        }
+            resetCountdown = true;
+
+            if (resetCountdown)
+            {
+                inverseCountdown = Random.Range(4f, 10f);
+                resetCountdown = false;
+            }
+
+        }*/
 
 
     }
