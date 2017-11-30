@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
     public int pickupCount;
     bool powerupActive;
     float powerupDuration = 5;
-    public bool immune;
+    bool immune;
 
     public int lap = 0;
     public int checkpointCount;
@@ -38,13 +38,14 @@ public class PlayerController : MonoBehaviour
     public GameObject mine;
     public GameObject player;
 
-    public int burst = 5;
+    int burst;
 
     private void Start()
     {
         rgb = GetComponent<Rigidbody>();
         gm = GameObject.Find("GameMaster").GetComponent<GameMaster>();
         player = gameObject;
+        //bulletPoint = ;
 
         powerupActive = false;
         immune = false;
@@ -52,7 +53,6 @@ public class PlayerController : MonoBehaviour
     // Update  is called once per frame
     void Update()
     {
-        Debug.Log(reverse);
 
         if(turnSpeed > turnLimit)
         {
@@ -66,7 +66,7 @@ public class PlayerController : MonoBehaviour
 
         float currentTurn = turnSpeed;
 
-        if (reverse == true) 
+        if (reverse == true)
         {
             currentTurn = -currentTurn;
         }
@@ -200,6 +200,7 @@ public class PlayerController : MonoBehaviour
 
             if(pickupCount == 2)
             {
+                burst = 5;
                 Shoot();
             }
 
@@ -211,7 +212,7 @@ public class PlayerController : MonoBehaviour
 
 
 
-        if(gm.inverseActive && !immune)
+        if(gm.inversion && !immune)
         {
             reverse = true;
         }
@@ -325,19 +326,15 @@ public class PlayerController : MonoBehaviour
 
         burst -= 1;
 
-        if(burst <= 0)
+        if(burst >= 0)
         {
-            pickupCount = 0;
-            burst = 5;
+            powerupActive = false;
         }
-
-           powerupActive = false;
     }
 
     void Mine()
     {
         Instantiate(mine, minePoint.transform.position, Quaternion.identity);
         powerupActive = false;
-        pickupCount = 0;
     }
 }
