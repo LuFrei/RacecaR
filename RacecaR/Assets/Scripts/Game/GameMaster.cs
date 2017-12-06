@@ -31,9 +31,6 @@ public class GameMaster : MonoBehaviour {
         {
             inverseDuration -= 1 * Time.deltaTime;
 
-            player.reverse = true;
-            player2.reverse = true;
-
             if(inverseDuration <= 0)
             {
                 inverseCountdown = Random.Range(15f, 20f);
@@ -44,9 +41,6 @@ public class GameMaster : MonoBehaviour {
         if (!inverseActive)
         {
             inverseCountdown -= 1 * Time.deltaTime;
-
-            player.reverse = false;
-            player2.reverse = false;
 
             if (inverseCountdown <= 0)
             {

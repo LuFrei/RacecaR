@@ -22,46 +22,24 @@ public class Mine : MonoBehaviour {
     {
         if (other.gameObject.name == "Player")
         {
-            if(player.reverse == true)
-            {
-                player.reverse = false;
-            }
-            if(player.reverse == false)
-            {
-                player.reverse = true;
-            }
-            //player.reverse = !player.reverse;
+            Debug.Log("A: " + player.reverse);
+            player.reverse = !player.reverse;
+            Debug.Log("B: " + player.reverse);
             Debug.Log("Player 1 just entered the bubble");
         }
 
         if (other.gameObject.name == "Player2")
         {
-            if (player2.reverse == true)
-            {
-                player2.reverse = false;
-            }
-            if (player2.reverse == false)
-            {
-                player2.reverse = true;
-            }
-            //player2.reverse = !player2.reverse;
+            player2.reverse = !player2.reverse;
             Debug.Log("Player 2 just entered the bubble");
         }
-
+        Debug.Log("C: " + player.reverse);
     }
 
-    private void OnTriggerExit(Collider other)
+    /*private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.name == "Player")
         {
-            if (player.reverse == true)
-            {
-                player.reverse = true;
-            }
-            if (player.reverse == false)
-            {
-                player.reverse = false;
-            }
             //player.reverse = player.reverse;
             Debug.Log("Player 1 just left the bubble");
         }
@@ -79,5 +57,5 @@ public class Mine : MonoBehaviour {
             //player2.reverse = player2.reverse;
             Debug.Log("Player 2 jusleftt entered the bubble");
         }
-    }
+    }*/
 }

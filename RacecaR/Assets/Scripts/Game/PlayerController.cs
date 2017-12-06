@@ -15,7 +15,8 @@ public class PlayerController : MonoBehaviour
     public float turnRate;
     public float turnLimit;
     float turnSpeed = 0;
-    public bool reverse;
+    public bool reverse { get { return Rev; } set { Rev = value;Debug.Log("SET REV: " + value); } }
+    private bool Rev;
 
     public int pickupCount;
     bool powerupActive;
@@ -131,7 +132,32 @@ public class PlayerController : MonoBehaviour
                             {
                                 Decelerate();
                             }
-                    break;
+
+                        //toggle powerup
+                        if (pickupCount > 0 && Input.GetKeyDown(KeyCode.E))
+                        {
+                            powerupActive = true;
+                        }
+
+                        if (powerupActive)
+                        {
+                            if (pickupCount == 1)
+                            {
+                                Immunity();
+                            }
+
+                            if (pickupCount == 2)
+                            {
+                                Shoot();
+                            }
+
+                            if (pickupCount == 3)
+                            {
+                                Mine();
+                            }
+                        }
+
+                        break;
                 }
 
                 case 2:
@@ -175,6 +201,29 @@ public class PlayerController : MonoBehaviour
                                 Decelerate();
                             }
 
+                    //toggle powerup
+                    if (pickupCount > 0 && Input.GetKeyDown(KeyCode.RightControl))
+                    {
+                        powerupActive = true;
+                    }
+
+                    if (powerupActive)
+                    {
+                        if (pickupCount == 1)
+                        {
+                            Immunity();
+                        }
+
+                        if(pickupCount == 2)
+                        {
+                            Shoot();
+                        }
+
+                        if(pickupCount == 3)
+                        {
+                            Mine();
+                        }
+                    }
                         break;
                     }
             }
@@ -185,29 +234,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        //toggle powerup
-        if (pickupCount > 0 && Input.GetKeyDown(KeyCode.E))
-        {
-            powerupActive = true;
-        }
 
-        if (powerupActive)
-        {
-            if (pickupCount == 1)
-            {
-                Immunity();
-            }
-
-            if(pickupCount == 2)
-            {
-                Shoot();
-            }
-
-            if(pickupCount == 3)
-            {
-                Mine();
-            }
-        }
 
 
 
